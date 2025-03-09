@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2025030800;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2022112800;        // Requires Moodle 4.3 (2022112800)
-$plugin->component = 'local_configkeeper'; // Full name of the plugin
-$plugin->maturity  = MATURITY_ALPHA;    // Maturity level
-$plugin->release   = '0.1.0';           // Human-readable version name
+$plugin->version   = 2025030800;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2022112800;        // Requires Moodle 4.3 (2022112800).
+$plugin->component = 'local_configkeeper'; // Full name of the plugin.
+$plugin->maturity  = MATURITY_ALPHA;    // Maturity level.
+$plugin->release   = '0.1.0';           // Human-readable version name.

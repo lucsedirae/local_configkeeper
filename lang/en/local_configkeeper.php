@@ -23,3 +23,6 @@
  */
 
 $string['pluginname'] = 'Config Keeper';
+
+// Entities.
+$string['entity:config_change'] = 'Config change';
