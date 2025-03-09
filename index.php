@@ -15,18 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Events list for local_configkeeper plugin
+ * External page for local_configkeeper plugin interface
  *
  * @package   local_configkeeper
  * @copyright 2025 Jon Deavers <jondeavers@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require_once(__DIR__ . '/../../config.php');
 
-$observers = [
-    [
-        'eventname' => '\core\event\config_log_created',
-        'callback' => '\local_configkeeper\config_observer::observe_config_log_created',
-    ],
-];
+global $PAGE, $OUTPUT;
+
+$context = context_system::instance();
+$PAGE->set_context($context);
+$PAGE->set_url(new moodle_url('/local/configkeeper'));
+$PAGE->set_heading(get_string('pluginname', 'local_configkeeper'));
+$PAGE->set_title(get_string('pluginname', 'local_configkeeper'));
+$PAGE->set_pagelayout('report');
+
+require_login();
+
+echo $OUTPUT->header();
+
+echo "<h1>Config Keeper</h1>";
+
+echo $OUTPUT->footer();
