@@ -14,30 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace local_configkeeper\local;
+
+use local_configkeeper\local\data\config_change;
+
 /**
- * Version information for local_configkeeper plugin.
+ * Data handling class for config changes
  *
  * @package   local_configkeeper
  * @copyright 2025 Jon Deavers <jondeavers@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace local_configkeeper;
-
-use local_configkeeper\local\config_change_handler;
-
-/**
- * Observer class for when core config logs are created.
- */
-class observer {
+class config_change_handler {
     /**
-     * Observer.
+     * Create a config change record
      *
-     * @param object $event
+     * @param array $data
      * @return void
      */
-    public static function observe_config_log_created(object $event): void {
-        $handler = new config_change_handler();
-        $handler->process_observer($event->get_data());
+    public function process_observer(array $data): void {
+        config_change::create_from_observer($data);
     }
 }

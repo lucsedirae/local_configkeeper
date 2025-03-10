@@ -80,7 +80,7 @@ class config_change extends base {
     /**
      * Create a new config change record from an observer event.
      *
-     * @param array $data
+     * @param array $data Resulting array from the observer event getData() method
      * @return void
      * @throws \coding_exception
      * @throws invalid_persistent_exception
@@ -93,7 +93,6 @@ class config_change extends base {
         $persistent->set('status', static::CONFIGKEEPER_CREATED);
         $persistent->set('notes', 'PLACEHOLDER NOTES');
 
-        $persistent->create();
-        return $persistent;
+        return $persistent->create();
     }
 }
