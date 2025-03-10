@@ -27,6 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 $observers = [
     [
         'eventname' => '\core\event\config_log_created',
-        'callback' => '\local_configkeeper\config_observer::observe_config_log_created',
+        'callback' => '\local_configkeeper\observer::observe_config_log_created',
     ],
 ];

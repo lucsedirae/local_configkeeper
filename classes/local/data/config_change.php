@@ -24,6 +24,8 @@
 
 namespace local_configkeeper\local\data;
 
+use core\invalid_persistent_exception;
+
 /**
  * Config note peristent class.
  */
@@ -37,6 +39,11 @@ class config_change extends base {
      * Logged.
      */
     const CONFIGKEEPER_CREATED = 'created';
+
+    /**
+     * Updated.
+     */
+    const CONFIGKEEPER_UPDATED = 'updated';
 
     /**
      * Synced.
@@ -58,8 +65,9 @@ class config_change extends base {
                 'type' => PARAM_TEXT,
                 'null' => NULL_NOT_ALLOWED,
                 'choices' => [
-                    self::ADV_CONFIGLOG_LOGGED,
-                    self::ADV_CONFIGLOG_SYNCED,
+                    self::CONFIGKEEPER_CREATED,
+                    self::CONFIGKEEPER_UPDATED,
+                    self::CONFIGKEEPER_SYNCED,
                 ],
             ],
             'notes' => [
@@ -67,5 +75,25 @@ class config_change extends base {
                 'null' => NULL_ALLOWED,
             ],
         ];
+    }
+
+    /**
+     * Create a new config change record from an observer event.
+     *
+     * @param array $data
+     * @return void
+     * @throws \coding_exception
+     * @throws invalid_persistent_exception
+     */
+    public static function create_from_observer(array $data): ?config_change {
+        $configid = $data['objectid'];
+        $persistent = new static();
+
+        $persistent->set('configid', $configid);
+        $persistent->set('status', static::CONFIGKEEPER_CREATED);
+        $persistent->set('notes', 'PLACEHOLDER NOTES');
+
+        $persistent->create();
+        return $persistent;
     }
 }

@@ -24,10 +24,12 @@
 
 namespace local_configkeeper;
 
+use local_configkeeper\local\data\config_change;
+
 /**
  * Observer class for when core config logs are created.
  */
-class config_observer {
+class observer {
     /**
      * Observer.
      *
@@ -35,9 +37,6 @@ class config_observer {
      * @return void
      */
     public static function observe_config_log_created(object $event): void {
-        $debug = [
-            'confirm' => 'CONFIG LOG CREATED',
-        ];
-        file_put_contents('/tmp/DEBUG.json', json_encode($debug) . PHP_EOL, FILE_APPEND);
+        config_change::create_from_observer($event->get_data());
     }
 }
