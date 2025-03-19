@@ -33,6 +33,11 @@ class config_change_handler {
      * @return void
      */
     public function process_observer(array $data): void {
+        $debug = [
+            'data' => $data,
+        ];
+        file_put_contents('/tmp/DEBUG.json', json_encode($debug) . PHP_EOL, FILE_APPEND);
+
         config_change::create_from_observer($data);
     }
 }

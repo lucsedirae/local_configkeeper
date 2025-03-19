@@ -22,6 +22,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core_reportbuilder\system_report_factory;
+use local_configkeeper\reportbuilder\local\systemreports\configkeeper;
+
 require_once(__DIR__ . '/../../config.php');
 
 global $PAGE, $OUTPUT;
@@ -35,8 +38,10 @@ $PAGE->set_pagelayout('report');
 
 require_login();
 
+$report = system_report_factory::create(configkeeper::class, $context);
+
 echo $OUTPUT->header();
 
-echo "<h1>Config Keeper</h1>";
+echo $report->output();
 
 echo $OUTPUT->footer();

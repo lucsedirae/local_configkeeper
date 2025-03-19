@@ -57,10 +57,6 @@ class config_change extends base {
      */
     protected static function define_properties(): array {
         return [
-            'configid' => [
-                'type' => PARAM_INT,
-                'null' => NULL_NOT_ALLOWED,
-            ],
             'status' => [
                 'type' => PARAM_TEXT,
                 'null' => NULL_NOT_ALLOWED,
@@ -69,6 +65,14 @@ class config_change extends base {
                     self::CONFIGKEEPER_UPDATED,
                     self::CONFIGKEEPER_SYNCED,
                 ],
+            ],
+            'logids' => [
+                'type' => PARAM_TEXT,
+                'null' => NULL_NOT_ALLOWED,
+            ],
+            'history' => [
+                'type' => PARAM_TEXT,
+                'null' => NULL_NOT_ALLOWED,
             ],
             'notes' => [
                 'type' => PARAM_TEXT,
@@ -89,7 +93,8 @@ class config_change extends base {
         $configid = $data['objectid'];
         $persistent = new static();
 
-        $persistent->set('configid', $configid);
+        $persistent->set('logids', $data['objectid']);
+
         $persistent->set('status', static::CONFIGKEEPER_CREATED);
         $persistent->set('notes', 'PLACEHOLDER NOTES');
 

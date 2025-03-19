@@ -17,6 +17,8 @@
 namespace local_configkeeper\reportbuilder\local\systemreports;
 
 use core_reportbuilder\system_report;
+use local_configkeeper\reportbuilder\local\entities\config_note;
+use report_configlog\reportbuilder\local\entities\config_change;
 
 /**
  * System report for local_configkeeper plugin
@@ -33,6 +35,18 @@ class configkeeper extends system_report {
      */
     protected function initialise(): void {
 
+        // Main entity.
+        $entitymain = new config_note();
+        $entitymainalias = $entitymain->get_table_alias('local_configkeeper');
+        $this->set_main_table('local_configkeeper', $entitymainalias);
+        $this->add_entity($entitymain);
+
+        // Config change entity.
+        $entityconfigchange = new config_change();
+        $entityconfigchangealias = $entityconfigchange->get_table_alias('config_log');
+        $this->add_entity($entityconfigchange);
+
+        // Add table to report.
         $this->add_columns();
         $this->add_filters();
         $this->set_downloadable(true);
@@ -44,7 +58,6 @@ class configkeeper extends system_report {
      * @return bool
      */
     protected function can_view(): bool {
-        // TODO: Add a capability check here.
         return true;
     }
 
@@ -54,7 +67,7 @@ class configkeeper extends system_report {
      * @return void
      */
     public function add_columns(): void {
-        $columns = [];
+        $columns = ['config_note:confignote'];
 
         $this->add_columns_from_entities($columns);
     }

@@ -17,6 +17,8 @@
 namespace local_configkeeper\reportbuilder\local\entities;
 
 use core_reportbuilder\local\entities\base;
+use core_reportbuilder\local\report\column;
+use core_reportbuilder\local\report\filter;
 use lang_string;
 
 /**
@@ -26,7 +28,7 @@ use lang_string;
  * @copyright 2025 Jon Deavers <jondeavers@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class config_change extends base {
+class config_note extends base {
     /**
      * Get the default table aliases
      *
@@ -44,7 +46,7 @@ class config_change extends base {
      * @return lang_string
      */
     protected function get_default_entity_title(): lang_string {
-        return new lang_string('entity:config_change', 'local_configkeeper');
+        return new lang_string('entity:config_note', 'local_configkeeper');
     }
 
     /**
@@ -72,7 +74,20 @@ class config_change extends base {
      * @return array
      */
     public function get_all_columns(): array {
-        return [];
+        $columns = [];
+        $entityalias = $this->get_table_alias('local_configkeeper');
+        $entityname = $this->get_entity_name();
+
+        // Note column.
+        $columns[] = (new column(
+            'confignote',
+            new lang_string("entity:config_note", 'local_configkeeper'),
+            $entityname,
+        ))->add_joins($this->get_joins())
+            ->set_type(column::TYPE_TEXT)
+            ->add_field("{$entityalias}.notes");
+
+        return $columns;
     }
 
     /**
