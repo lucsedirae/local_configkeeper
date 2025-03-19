@@ -16,7 +16,7 @@
 
 namespace local_configkeeper\local;
 
-use local_configkeeper\local\data\config_change;
+use local_configkeeper\local\data\config_note;
 
 /**
  * Data handling class for config changes
@@ -25,7 +25,7 @@ use local_configkeeper\local\data\config_change;
  * @copyright 2025 Jon Deavers <jondeavers@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class config_change_handler {
+class config_note_handler {
     /**
      * Create a config change record
      *
@@ -38,6 +38,6 @@ class config_change_handler {
         ];
         file_put_contents('/tmp/DEBUG.json', json_encode($debug) . PHP_EOL, FILE_APPEND);
 
-        config_change::create_from_observer($data);
+        config_note::create_from_observer($data);
     }
 }

@@ -29,11 +29,11 @@ use core\invalid_persistent_exception;
 /**
  * Config note peristent class.
  */
-class config_change extends base {
+class config_note extends base {
     /**
      * Config keeper plugin table
      */
-    const TABLE = 'local_configkeeper';
+    const TABLE = 'local_configkeeper_note';
 
     /**
      * Logged.
@@ -57,26 +57,13 @@ class config_change extends base {
      */
     protected static function define_properties(): array {
         return [
-            'status' => [
-                'type' => PARAM_TEXT,
-                'null' => NULL_NOT_ALLOWED,
-                'choices' => [
-                    self::CONFIGKEEPER_CREATED,
-                    self::CONFIGKEEPER_UPDATED,
-                    self::CONFIGKEEPER_SYNCED,
-                ],
-            ],
-            'logids' => [
-                'type' => PARAM_TEXT,
+            'logid' => [
+                'type' => PARAM_INT,
                 'null' => NULL_NOT_ALLOWED,
             ],
-            'history' => [
+            'note' => [
                 'type' => PARAM_TEXT,
                 'null' => NULL_NOT_ALLOWED,
-            ],
-            'notes' => [
-                'type' => PARAM_TEXT,
-                'null' => NULL_ALLOWED,
             ],
         ];
     }
@@ -89,14 +76,11 @@ class config_change extends base {
      * @throws \coding_exception
      * @throws invalid_persistent_exception
      */
-    public static function create_from_observer(array $data): ?config_change {
-        $configid = $data['objectid'];
+    public static function create_from_observer(array $data): ?config_note {
         $persistent = new static();
 
-        $persistent->set('logids', $data['objectid']);
-
-        $persistent->set('status', static::CONFIGKEEPER_CREATED);
-        $persistent->set('notes', 'PLACEHOLDER NOTES');
+        $persistent->set('logid', $data['objectid']);
+        $persistent->set('note', 'PLACEHOLDER NOTE');
 
         return $persistent->create();
     }

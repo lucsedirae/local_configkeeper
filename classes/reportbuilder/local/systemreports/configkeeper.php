@@ -37,8 +37,8 @@ class configkeeper extends system_report {
 
         // Main entity.
         $entitymain = new config_note();
-        $entitymainalias = $entitymain->get_table_alias('local_configkeeper');
-        $this->set_main_table('local_configkeeper', $entitymainalias);
+        $entitymainalias = $entitymain->get_table_alias('local_configkeeper_note');
+        $this->set_main_table('local_configkeeper_note', $entitymainalias);
         $this->add_entity($entitymain);
 
         // Config change entity.

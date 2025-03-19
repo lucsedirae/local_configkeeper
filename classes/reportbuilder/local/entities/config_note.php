@@ -36,7 +36,7 @@ class config_note extends base {
      */
     protected function get_default_table_aliases(): array {
         return [
-            'local_configkeeper' => 'lc',
+            'local_configkeeper_note' => 'lcn',
         ];
     }
 
@@ -75,7 +75,7 @@ class config_note extends base {
      */
     public function get_all_columns(): array {
         $columns = [];
-        $entityalias = $this->get_table_alias('local_configkeeper');
+        $entityalias = $this->get_table_alias('local_configkeeper_note');
         $entityname = $this->get_entity_name();
 
         // Note column.
@@ -85,7 +85,7 @@ class config_note extends base {
             $entityname,
         ))->add_joins($this->get_joins())
             ->set_type(column::TYPE_TEXT)
-            ->add_field("{$entityalias}.notes");
+            ->add_field("{$entityalias}.note");
 
         return $columns;
     }

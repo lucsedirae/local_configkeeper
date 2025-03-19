@@ -24,7 +24,7 @@
 
 namespace local_configkeeper;
 
-use local_configkeeper\local\config_change_handler;
+use local_configkeeper\local\config_note_handler;
 
 /**
  * Observer class for when core config logs are created.
@@ -37,7 +37,7 @@ class observer {
      * @return void
      */
     public static function observe_config_log_created(object $event): void {
-        $handler = new config_change_handler();
+        $handler = new config_note_handler();
         $handler->process_observer($event->get_data());
     }
 }
