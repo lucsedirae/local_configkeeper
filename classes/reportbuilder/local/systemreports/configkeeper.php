@@ -71,6 +71,7 @@ class configkeeper extends system_report {
         $columns = [
             'config_change:plugin',
             'config_change:setting',
+            'config_change:timemodified',
             'config_note:confignote',
         ];
 
