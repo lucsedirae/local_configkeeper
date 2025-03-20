@@ -34,7 +34,6 @@ class configkeeper extends system_report {
      * @return void
      */
     protected function initialise(): void {
-
         // Main entity.
         $entitymain = new config_note();
         $entitymainalias = $entitymain->get_table_alias('local_configkeeper_note');
@@ -44,7 +43,9 @@ class configkeeper extends system_report {
         // Config change entity.
         $entityconfigchange = new config_change();
         $entityconfigchangealias = $entityconfigchange->get_table_alias('config_log');
-        $this->add_entity($entityconfigchange);
+        $this->add_entity($entityconfigchange->add_join(
+            "JOIN {config_log} {$entityconfigchangealias} ON {$entityconfigchangealias}.id = {$entitymainalias}.logid"
+        ));
 
         // Add table to report.
         $this->add_columns();
@@ -67,7 +68,11 @@ class configkeeper extends system_report {
      * @return void
      */
     public function add_columns(): void {
-        $columns = ['config_note:confignote'];
+        $columns = [
+            'config_change:plugin',
+            'config_change:setting',
+            'config_note:confignote',
+        ];
 
         $this->add_columns_from_entities($columns);
     }
@@ -78,7 +83,9 @@ class configkeeper extends system_report {
      * @return void
      */
     public function add_filters(): void {
-        $filters = [];
+        $filters = [
+            'config_change:setting',
+        ];
 
         $this->add_filters_from_entities($filters);
     }

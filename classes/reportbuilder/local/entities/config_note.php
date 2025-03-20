@@ -20,6 +20,7 @@ use core_reportbuilder\local\entities\base;
 use core_reportbuilder\local\report\column;
 use core_reportbuilder\local\report\filter;
 use lang_string;
+use report_configlog\reportbuilder\local\entities\config_change;
 
 /**
  * Config change entity for local_configkeeper plugin reportbuilder
@@ -37,6 +38,7 @@ class config_note extends base {
     protected function get_default_table_aliases(): array {
         return [
             'local_configkeeper_note' => 'lcn',
+            'config_log' => 'cl',
         ];
     }
 
@@ -86,6 +88,17 @@ class config_note extends base {
         ))->add_joins($this->get_joins())
             ->set_type(column::TYPE_TEXT)
             ->add_field("{$entityalias}.note");
+
+        // Plugin column.
+        $configlogentity = new config_change();
+        $configlogalias = $configlogentity->get_table_alias('config_log');
+        $columns[] = (new column(
+            'plugin',
+            new lang_string("plugin"),
+            $entityname,
+        ))->add_joins($this->get_joins())
+            ->set_type(column::TYPE_TEXT)
+            ->add_field("{$configlogalias}.plugin");
 
         return $columns;
     }
