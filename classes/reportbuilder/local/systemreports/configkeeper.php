@@ -73,6 +73,7 @@ class configkeeper extends system_report {
             'config_change:setting',
             'config_change:timemodified',
             'config_note:confignote',
+            'config_note:actions',
         ];
 
         $this->add_columns_from_entities($columns);

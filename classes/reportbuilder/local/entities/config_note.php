@@ -18,9 +18,8 @@ namespace local_configkeeper\reportbuilder\local\entities;
 
 use core_reportbuilder\local\entities\base;
 use core_reportbuilder\local\report\column;
-use core_reportbuilder\local\report\filter;
 use lang_string;
-use report_configlog\reportbuilder\local\entities\config_change;
+use stdClass;
 
 /**
  * Config change entity for local_configkeeper plugin reportbuilder
@@ -30,6 +29,7 @@ use report_configlog\reportbuilder\local\entities\config_change;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class config_note extends base {
+
     /**
      * Get the default table aliases
      *
@@ -74,6 +74,7 @@ class config_note extends base {
      * Get all columns
      *
      * @return array
+     * @throws \coding_exception
      */
     public function get_all_columns(): array {
         $columns = [];
@@ -87,18 +88,22 @@ class config_note extends base {
             $entityname,
         ))->add_joins($this->get_joins())
             ->set_type(column::TYPE_TEXT)
-            ->add_field("{$entityalias}.note");
+            ->add_fields("{$entityalias}.logid, {$entityalias}.note")
+            ->add_callback(static function(?string $value, $row): string {
+                return self::get_confignote_field($value, $row);
+            });
 
-        // Plugin column.
-        $configlogentity = new config_change();
-        $configlogalias = $configlogentity->get_table_alias('config_log');
+        // Actions column.
         $columns[] = (new column(
-            'plugin',
-            new lang_string("plugin"),
+            'actions',
+            new lang_string('actions'),
             $entityname,
         ))->add_joins($this->get_joins())
             ->set_type(column::TYPE_TEXT)
-            ->add_field("{$configlogalias}.plugin");
+            ->add_fields("{$entityalias}.logid")
+            ->add_callback(static function(?string $value, $row): string {
+                return self::get_actions_field($value, $row);
+            });
 
         return $columns;
     }
@@ -110,5 +115,27 @@ class config_note extends base {
      */
     public function get_all_filters(): array {
         return [];
+    }
+
+    /**
+     * Callback for the note field
+     *
+     * @param int $value
+     * @param stdClass $row
+     * @return string
+     */
+    public static function get_confignote_field(int $value, stdClass $row): string {
+        return $row->note;
+    }
+
+    /**
+     * Callback for the actions field
+     *
+     * @param int|null $value
+     * @param stdClass $row
+     * @return string
+     */
+    private static function get_actions_field(?int $value, $row) {
+        return '';
     }
 }
