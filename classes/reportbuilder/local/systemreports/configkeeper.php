@@ -32,6 +32,7 @@ class configkeeper extends system_report {
      * Initialise the report
      *
      * @return void
+     * @throws \coding_exception
      */
     protected function initialise(): void {
         // Main entity.

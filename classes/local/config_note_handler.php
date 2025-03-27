@@ -16,6 +16,7 @@
 
 namespace local_configkeeper\local;
 
+use core\invalid_persistent_exception;
 use local_configkeeper\local\data\config_note;
 
 /**
@@ -31,13 +32,10 @@ class config_note_handler {
      *
      * @param array $data
      * @return void
+     * @throws \coding_exception
+     * @throws invalid_persistent_exception
      */
     public function process_observer(array $data): void {
-        $debug = [
-            'data' => $data,
-        ];
-        file_put_contents('/tmp/DEBUG.json', json_encode($debug) . PHP_EOL, FILE_APPEND);
-
         config_note::create_from_observer($data);
     }
 }
