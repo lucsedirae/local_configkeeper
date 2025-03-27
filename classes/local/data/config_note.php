@@ -73,8 +73,7 @@ class config_note extends base {
         $record = new \stdClass();
         $record->logid = $data['objectid'];
         $record->status = self::CONFIGKEEPER_NEW;
-        $record->note = 'PLACEHOLDER NOTE';
-
+        $record->note = '';
         $persistent = new static(0, $record);
 
         return $persistent->create();
