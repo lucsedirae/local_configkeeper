@@ -45,7 +45,13 @@ class configkeeper extends system_report {
         $entityconfigchange = new config_change();
         $entityconfigchangealias = $entityconfigchange->get_table_alias('config_log');
         $this->add_entity($entityconfigchange->add_join(
-            "JOIN {config_log} {$entityconfigchangealias} ON {$entityconfigchangealias}.id = {$entitymainalias}.logid"
+            "JOIN {config_log} {$entityconfigchangealias}
+                     ON {$entityconfigchangealias}.id = {$entitymainalias}.logid
+                    AND {$entityconfigchangealias}.timemodified = (
+                       SELECT MAX(subquery.timemodified)
+                         FROM {config_log} subquery
+                        WHERE COALESCE(subquery.plugin, '') = COALESCE({$entityconfigchangealias}.plugin, '')
+                          AND subquery.name = {$entityconfigchangealias}.name)"
         ));
 
         // Add table to report.
