@@ -32,19 +32,27 @@ class configkeeper extends system_report {
      * Initialise the report
      *
      * @return void
+     * @throws \coding_exception
      */
     protected function initialise(): void {
-
         // Main entity.
         $entitymain = new config_note();
-        $entitymainalias = $entitymain->get_table_alias('local_configkeeper_note');
-        $this->set_main_table('local_configkeeper_note', $entitymainalias);
+        $entitymainalias = $entitymain->get_table_alias('local_configkeeper');
+        $this->set_main_table('local_configkeeper', $entitymainalias);
         $this->add_entity($entitymain);
 
         // Config change entity.
         $entityconfigchange = new config_change();
         $entityconfigchangealias = $entityconfigchange->get_table_alias('config_log');
-        $this->add_entity($entityconfigchange);
+        $this->add_entity($entityconfigchange->add_join(
+            "JOIN {config_log} {$entityconfigchangealias}
+                     ON {$entityconfigchangealias}.id = {$entitymainalias}.logid
+                    AND {$entityconfigchangealias}.timemodified = (
+                       SELECT MAX(subquery.timemodified)
+                         FROM {config_log} subquery
+                        WHERE COALESCE(subquery.plugin, '') = COALESCE({$entityconfigchangealias}.plugin, '')
+                          AND subquery.name = {$entityconfigchangealias}.name)"
+        ));
 
         // Add table to report.
         $this->add_columns();
@@ -67,7 +75,12 @@ class configkeeper extends system_report {
      * @return void
      */
     public function add_columns(): void {
-        $columns = ['config_note:confignote'];
+        $columns = [
+            'config_note:setting',
+            'config_change:timemodified',
+            'config_note:confignote',
+            'config_note:actions',
+        ];
 
         $this->add_columns_from_entities($columns);
     }
@@ -78,7 +91,9 @@ class configkeeper extends system_report {
      * @return void
      */
     public function add_filters(): void {
-        $filters = [];
+        $filters = [
+            'config_change:setting',
+        ];
 
         $this->add_filters_from_entities($filters);
     }

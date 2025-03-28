@@ -18,8 +18,9 @@ namespace local_configkeeper\reportbuilder\local\entities;
 
 use core_reportbuilder\local\entities\base;
 use core_reportbuilder\local\report\column;
-use core_reportbuilder\local\report\filter;
+
 use lang_string;
+use stdClass;
 
 /**
  * Config change entity for local_configkeeper plugin reportbuilder
@@ -29,6 +30,7 @@ use lang_string;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class config_note extends base {
+
     /**
      * Get the default table aliases
      *
@@ -36,7 +38,8 @@ class config_note extends base {
      */
     protected function get_default_table_aliases(): array {
         return [
-            'local_configkeeper_note' => 'lcn',
+            'local_configkeeper' => 'lck',
+            'config_log' => 'cl',
         ];
     }
 
@@ -72,11 +75,26 @@ class config_note extends base {
      * Get all columns
      *
      * @return array
+     * @throws \coding_exception
      */
     public function get_all_columns(): array {
         $columns = [];
-        $entityalias = $this->get_table_alias('local_configkeeper_note');
+        $entityalias = $this->get_table_alias('local_configkeeper');
         $entityname = $this->get_entity_name();
+        $configlogtablealias = $this->get_table_alias('config_log');
+
+        // Setting column.
+        $columns[] = (new column(
+            'setting',
+            new lang_string("settingfield", 'local_configkeeper'),
+            $entityname,
+        ))->add_joins($this->get_joins())
+            ->set_type(column::TYPE_TEXT)
+            ->set_is_sortable(true)
+            ->add_fields("{$configlogtablealias}.name, {$configlogtablealias}.plugin")
+            ->add_callback(static function(?string $value, $row): string {
+                return self::get_setting_field($value, $row);
+            });
 
         // Note column.
         $columns[] = (new column(
@@ -85,7 +103,22 @@ class config_note extends base {
             $entityname,
         ))->add_joins($this->get_joins())
             ->set_type(column::TYPE_TEXT)
-            ->add_field("{$entityalias}.note");
+            ->add_fields("{$entityalias}.logid, {$entityalias}.note")
+            ->add_callback(static function(?string $value, $row): string {
+                return self::get_confignote_field($value, $row);
+            });
+
+        // Actions column.
+        $columns[] = (new column(
+            'actions',
+            new lang_string('actions'),
+            $entityname,
+        ))->add_joins($this->get_joins())
+            ->set_type(column::TYPE_TEXT)
+            ->add_fields("{$entityalias}.logid")
+            ->add_callback(static function(?string $value, $row): string {
+                return self::get_actions_field($value, $row);
+            });
 
         return $columns;
     }
@@ -97,5 +130,40 @@ class config_note extends base {
      */
     public function get_all_filters(): array {
         return [];
+    }
+
+    /**
+     * Callback for the setting field
+     *
+     * @param string|null $value
+     * @param stdClass $row
+     * @return string
+     * @throws \coding_exception
+     */
+    public static function get_setting_field(?string $value, stdClass $row): string {
+        $plugin = $row->plugin ?? get_string('core', 'local_configkeeper');
+        return ucfirst($plugin) . ': ' . $row->name;
+    }
+
+    /**
+     * Callback for the note field
+     *
+     * @param int $value
+     * @param stdClass $row
+     * @return string
+     */
+    public static function get_confignote_field(int $value, stdClass $row): string {
+        return $row->note;
+    }
+
+    /**
+     * Callback for the actions field
+     *
+     * @param int|null $value
+     * @param stdClass $row
+     * @return string
+     */
+    private static function get_actions_field(?int $value, $row) {
+        return '';
     }
 }

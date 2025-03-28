@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/configkeeper/db" VERSION="20250319" COMMENT="XMLDB file for Moodle local/configkeeper"
+<XMLDB PATH="local/configkeeper/db" VERSION="20250327" COMMENT="XMLDB file for Moodle local/configkeeper"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="local_configkeeper_note" COMMENT="Notes table for configkeeper">
+    <TABLE NAME="local_configkeeper" COMMENT="Notes table for configkeeper">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="logid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Comma separated list of ids from config_logs"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="256" NOTNULL="true" DEFAULT="new" SEQUENCE="false" COMMENT="A record has a status of &quot;new&quot; until it has been reviewed by an admin. Once reviewed it has a status of &quot;reviewed&quot;."/>
         <FIELD NAME="note" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="Notes about config changes"/>
         <FIELD NAME="usermodified" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Last user to update record"/>
         <FIELD NAME="timemodified" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false" COMMENT="Last time record was updated"/>
