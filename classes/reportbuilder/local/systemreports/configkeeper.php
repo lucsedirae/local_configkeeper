@@ -70,8 +70,7 @@ class configkeeper extends system_report {
      */
     public function add_columns(): void {
         $columns = [
-            'config_change:plugin',
-            'config_change:setting',
+            'config_note:setting',
             'config_change:timemodified',
             'config_note:confignote',
             'config_note:actions',

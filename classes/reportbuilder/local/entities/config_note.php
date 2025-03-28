@@ -18,6 +18,7 @@ namespace local_configkeeper\reportbuilder\local\entities;
 
 use core_reportbuilder\local\entities\base;
 use core_reportbuilder\local\report\column;
+
 use lang_string;
 use stdClass;
 
@@ -80,6 +81,20 @@ class config_note extends base {
         $columns = [];
         $entityalias = $this->get_table_alias('local_configkeeper');
         $entityname = $this->get_entity_name();
+        $configlogtablealias = $this->get_table_alias('config_log');
+
+        // Setting column.
+        $columns[] = (new column(
+            'setting',
+            new lang_string("settingfield", 'local_configkeeper'),
+            $entityname,
+        ))->add_joins($this->get_joins())
+            ->set_type(column::TYPE_TEXT)
+            ->set_is_sortable(true)
+            ->add_fields("{$configlogtablealias}.name, {$configlogtablealias}.plugin")
+            ->add_callback(static function(?string $value, $row): string {
+                return self::get_setting_field($value, $row);
+            });
 
         // Note column.
         $columns[] = (new column(
@@ -115,6 +130,19 @@ class config_note extends base {
      */
     public function get_all_filters(): array {
         return [];
+    }
+
+    /**
+     * Callback for the setting field
+     *
+     * @param string|null $value
+     * @param stdClass $row
+     * @return string
+     * @throws \coding_exception
+     */
+    public static function get_setting_field(?string $value, stdClass $row): string {
+        $plugin = $row->plugin ?? get_string('core', 'local_configkeeper');
+        return ucfirst($plugin) . ': ' . $row->name;
     }
 
     /**
