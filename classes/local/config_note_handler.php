@@ -20,7 +20,7 @@ use core\invalid_persistent_exception;
 use local_configkeeper\local\data\config_note;
 
 /**
- * Data handling class for config changes
+ * Data handling class for config changes.
  *
  * @package   local_configkeeper
  * @copyright 2025 Jon Deavers <jondeavers@gmail.com>
@@ -28,7 +28,7 @@ use local_configkeeper\local\data\config_note;
  */
 class config_note_handler {
     /**
-     * Create a config change record
+     * Create a config change record.
      *
      * @param array $data
      * @return void
@@ -37,5 +37,32 @@ class config_note_handler {
      */
     public function process_observer(array $data): void {
         config_note::create_from_observer($data);
+    }
+
+    /**
+     * Process the hook to display the config change modal.
+     *
+     * @return void
+     * @throws \coding_exception
+     * @throws invalid_persistent_exception
+     * @throws \dml_exception
+     */
+    public function process_hook(): void {
+        // Get the config changes that have not yet been viewed.
+        $changes = config_note::get_notes(config_note::CONFIGKEEPER_NEW);
+
+        // Mark the config changes as viewed.
+        foreach ($changes as $change) {
+            $change->set_status(config_note::CONFIGKEEPER_REVIEWED);
+        }
+
+        // Add the change record to the config note table.
+
+        // Check if the config note table is empty.
+
+        // If empty, do not display the modal.
+
+        // If not empty, display the modal.
+
     }
 }

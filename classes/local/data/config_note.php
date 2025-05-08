@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Persistent class for config changes
+ * Persistent class for config changes.
  *
  * @package   local_configkeeper
  * @copyright 2025 Jon Deavers <jondeavers@gmail.com>
@@ -77,5 +77,44 @@ class config_note extends base {
         $persistent = new static(0, $record);
 
         return $persistent->create();
+    }
+
+    /**
+     * Gets new changes that have been recorded by the observer.
+     *
+     * @param string $status
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public static function get_notes(string $status): array {
+        global $DB;
+
+        // Validate the status parameter.
+        if (!in_array($status, [self::CONFIGKEEPER_NEW, self::CONFIGKEEPER_REVIEWED])) {
+            throw new \coding_exception('Invalid status parameter provided');
+        }
+
+        // Get records from database that match the status.
+        $records = $DB->get_records(self::TABLE, ['status' => $status]);
+        $notes = [];
+        foreach ($records as $record) {
+            $notes[] = new static(0, $record);
+        }
+
+        return $notes;
+    }
+
+    /**
+     * Get the status of the config change.
+     *
+     * @param string $status
+     * @return void
+     * @throws \coding_exception
+     * @throws invalid_persistent_exception
+     */
+    public function set_status(string $status): void {
+        $this->set('status', $status);
+        $this->update();
     }
 }
