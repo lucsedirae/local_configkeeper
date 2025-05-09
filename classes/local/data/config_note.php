@@ -27,7 +27,7 @@ namespace local_configkeeper\local\data;
 use core\invalid_persistent_exception;
 
 /**
- * Config note peristent class.
+ * Config note persistent class.
  */
 class config_note extends base {
     /** Config keeper plugin table */
@@ -40,7 +40,7 @@ class config_note extends base {
     const CONFIGKEEPER_REVIEWED = 'reviewed';
 
     /**
-     * Define persistent properites.
+     * Define persistent properties.
      *
      * @return array[]
      */

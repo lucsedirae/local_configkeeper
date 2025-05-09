@@ -27,6 +27,9 @@ use local_configkeeper\local\data\config_note;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class config_note_handler {
+    /** SQL table shortname */
+    const SQL_TABLE_SHORTNAME = 'local_configkeeper_confignote_table';
+
     /**
      * Create a config change record.
      *
@@ -51,18 +54,30 @@ class config_note_handler {
         // Get the config changes that have not yet been viewed.
         $changes = config_note::get_notes(config_note::CONFIGKEEPER_NEW);
 
-        // Mark the config changes as viewed.
+        $rows = [];
         foreach ($changes as $change) {
+            // Add new changes to template.
+            $rows[] = $this->format_row_for_template($change);
+
+            // Mark the config changes as viewed.
             $change->set_status(config_note::CONFIGKEEPER_REVIEWED);
         }
 
-        // Add the change record to the config note table.
-
-        // Check if the config note table is empty.
-
-        // If empty, do not display the modal.
-
         // If not empty, display the modal.
+        if (!empty($changes)) {
+            global $PAGE;
+            $PAGE->requires->js_call_amd('local_configkeeper/confignotemodal', 'init');
+        }
+    }
 
+    /**
+     * Format the row for the template.
+     *
+     * @param object $row
+     * @return string
+     */
+    private function format_row_for_template(object $row): string {
+        // Replace this logic to format the row for your template.
+        return $row;
     }
 }

@@ -28,8 +28,11 @@ use local_configkeeper\local\config_note_handler;
  * Callback function to inject code before the footer.
  *
  * @return void
+ * @throws \core\invalid_persistent_exception
+ * @throws coding_exception
+ * @throws dml_exception
  */
-function local_configkeeper_before_footer() {
+function local_configkeeper_before_footer(): void {
     $handler = new config_note_handler();
     $handler->process_hook();
 }
