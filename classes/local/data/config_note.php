@@ -113,7 +113,7 @@ class config_note extends base {
      * @throws \coding_exception
      * @throws invalid_persistent_exception
      */
-    public function set_status(string $status): void {
+    public function set_note_status(string $status): void {
         $this->set('status', $status);
         $this->update();
     }

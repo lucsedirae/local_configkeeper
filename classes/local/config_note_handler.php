@@ -48,36 +48,27 @@ class config_note_handler {
      * @return void
      * @throws \coding_exception
      * @throws invalid_persistent_exception
-     * @throws \dml_exception
+     * @throws \dml_exception|\moodle_exception
      */
     public function process_hook(): void {
+        global $OUTPUT;
+
         // Get the config changes that have not yet been viewed.
         $changes = config_note::get_notes(config_note::CONFIGKEEPER_NEW);
 
         $rows = [];
         foreach ($changes as $change) {
             // Add new changes to template.
-            $rows[] = $this->format_row_for_template($change);
+            $rows[] = $OUTPUT->render_from_template('local_configkeeper/confignote_row', $change);
 
             // Mark the config changes as viewed.
-            $change->set_status(config_note::CONFIGKEEPER_REVIEWED);
+            $change->set_note_status(config_note::CONFIGKEEPER_REVIEWED);
         }
 
         // If not empty, display the modal.
         if (!empty($changes)) {
             global $PAGE;
-            $PAGE->requires->js_call_amd('local_configkeeper/confignotemodal', 'init');
+            $PAGE->requires->js_call_amd('local_configkeeper/confignotemodal', 'init', [$rows]);
         }
-    }
-
-    /**
-     * Format the row for the template.
-     *
-     * @param object $row
-     * @return string
-     */
-    private function format_row_for_template(object $row): string {
-        // Replace this logic to format the row for your template.
-        return $row;
     }
 }

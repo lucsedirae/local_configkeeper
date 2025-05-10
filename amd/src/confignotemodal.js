@@ -1,12 +1,13 @@
 import Modal from 'core/modal';
 
-export const init = async() => {
+export const init = async(rows) => {
     const modal = await Modal.create({
         title: 'Config Note',
-        body: '<h4>TEST BODY</h4>',
+        body: rows,
         footer: 'Test footer',
         removeOnClose: true,
     });
 
+    window.console.log('rows', rows);
     await modal.show();
 };
