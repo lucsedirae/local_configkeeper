@@ -24,6 +24,7 @@
 
 namespace local_configkeeper;
 
+use core\invalid_persistent_exception;
 use local_configkeeper\local\config_note_handler;
 
 /**
@@ -35,6 +36,8 @@ class observer {
      *
      * @param object $event
      * @return void
+     * @throws \coding_exception
+     * @throws invalid_persistent_exception
      */
     public static function observe_config_log_created(object $event): void {
         $handler = new config_note_handler();

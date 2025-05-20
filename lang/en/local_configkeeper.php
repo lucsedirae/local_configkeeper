@@ -25,7 +25,12 @@
 $string['pluginname'] = 'Config keeper';
 
 $string['core'] = 'Core';
-$string['settingfield'] = 'Plugin - setting';
+$string['config'] = 'Config';
+$string['leave_note'] = 'Leave a note';
+$string['note'] = 'Note';
+$string['plugin'] = 'Plugin';
+$string['setting'] = 'Setting';
+$string['value'] = 'Value';
 
 // Entities.
 $string['entity:config_note'] = 'Config note';
