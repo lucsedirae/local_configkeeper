@@ -51,24 +51,59 @@ class config_note_handler {
      * @throws \dml_exception|\moodle_exception
      */
     public function process_hook(): void {
-        global $OUTPUT;
-
         // Get the config changes that have not yet been viewed.
         $changes = config_note::get_notes(config_note::CONFIGKEEPER_NEW);
 
-        $rows = [];
+        // Mark the config changes as viewed.
         foreach ($changes as $change) {
-            // Add new changes to template.
-            $rows[] = $OUTPUT->render_from_template('local_configkeeper/confignote_row', $change);
-
-            // Mark the config changes as viewed.
             $change->set_note_status(config_note::CONFIGKEEPER_REVIEWED);
         }
 
         // If not empty, display the modal.
         if (!empty($changes)) {
             global $PAGE;
-            $PAGE->requires->js_call_amd('local_configkeeper/confignotemodal', 'init', [$rows]);
+            $html = $this->export_for_template($changes);
+
+            $debug = [
+                'html' => $html,
+            ];
+            file_put_contents('/tmp/DEBUG.json', json_encode($debug) . PHP_EOL);
+            chmod('/tmp/DEBUG.json', 664);
+
+            $PAGE->requires->js_call_amd('local_configkeeper/confignotemodal', 'init', [$html]);
         }
+    }
+
+    /**
+     * Prepare the data for the template.
+     *
+     * @param array $changes
+     * @return bool|string
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function export_for_template(array $changes): bool|string {
+        // Get the config change data.
+        global $DB, $OUTPUT;
+
+        $rows = [];
+        foreach ($changes as $change) {
+            $logentry = $DB->get_record('config_log', ['id' => $change->get('logid')], '*', MUST_EXIST);
+
+            $rows[] = [
+                'id' => $change->get('id'),
+                'plugin' => $logentry->plugin ?? get_string('core', 'local_configkeeper'),
+                'name' => $logentry->name,
+                'value' => $logentry->value,
+                'note' => $change->get('note'),
+            ];
+        }
+
+        $data = [
+            'rows' => $rows,
+        ];
+
+        return $OUTPUT->render_from_template('local_configkeeper/confignote_row', $data);
     }
 }

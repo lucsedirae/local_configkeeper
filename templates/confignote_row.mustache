@@ -34,5 +34,35 @@
 }}
 
 <div>
-    <h4>THIS IS A TEMPLATE ROW</h4>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">{{#str}}plugin, local_configkeeper{{/str}}: {{#str}}setting, local_configkeeper{{/str}}</th>
+            <th scope="col">{{#str}}value, local_configkeeper{{/str}}</th>
+            <th scope="col">{{#str}}note, local_configkeeper{{/str}}</th>
+        </tr>
+        </thead>
+        {{#rows}}
+            <tr>
+                <td>{{{plugin}}}: {{{name}}}</td>
+                <td>{{{value}}}</td>
+                <td>
+                    <textarea cols="40" rows="3" data-logid="{{id}}">
+                        {{#note}}
+                            {{{note}}}
+                        {{/note}}
+                        {{^note}}
+                            {{#str}}leave_note, local_configkeeper{{/str}}
+                        {{/note}}
+                    </textarea>
+                </td>
+            </tr>
+        {{/rows}}
+    </table>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">
+            {{#str}}save{{/str}}
+        </button>
+    </div>
 </div>

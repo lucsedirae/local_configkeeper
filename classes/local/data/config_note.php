@@ -33,6 +33,11 @@ class config_note extends base {
     /** Config keeper plugin table */
     const TABLE = 'local_configkeeper';
 
+    /**
+     * SQL table shortname.
+     */
+    const TABLE_ALIAS = 'lc';
+
     /** New */
     const CONFIGKEEPER_NEW = 'new';
 
