@@ -27,9 +27,6 @@ use local_configkeeper\local\data\config_note;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class config_note_handler {
-    /** SQL table shortname */
-    const SQL_TABLE_SHORTNAME = 'local_configkeeper_confignote_table';
-
     /**
      * Create a config change record.
      *
@@ -53,57 +50,20 @@ class config_note_handler {
     public function process_hook(): void {
         // Get the config changes that have not yet been viewed.
         $changes = config_note::get_notes(config_note::CONFIGKEEPER_NEW);
+        $ids = [];
 
         // Mark the config changes as viewed.
         foreach ($changes as $change) {
+            $ids[] = $change->get('id');
             $change->set_note_status(config_note::CONFIGKEEPER_REVIEWED);
         }
 
-        // If not empty, display the modal.
-        if (!empty($changes)) {
+        // If there are ids, display the modal.
+        if (!empty($ids)) {
             global $PAGE;
-            $html = $this->export_for_template($changes);
-
-            $debug = [
-                'html' => $html,
-            ];
-            file_put_contents('/tmp/DEBUG.json', json_encode($debug) . PHP_EOL);
-            chmod('/tmp/DEBUG.json', 664);
-
-            $PAGE->requires->js_call_amd('local_configkeeper/confignotemodal', 'init', [$html]);
+            $PAGE->requires->js_call_amd('local_configkeeper/confignotemodal',
+                'init',
+                ['ids' => $ids]);
         }
-    }
-
-    /**
-     * Prepare the data for the template.
-     *
-     * @param array $changes
-     * @return bool|string
-     * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws \moodle_exception
-     */
-    public function export_for_template(array $changes): bool|string {
-        // Get the config change data.
-        global $DB, $OUTPUT;
-
-        $rows = [];
-        foreach ($changes as $change) {
-            $logentry = $DB->get_record('config_log', ['id' => $change->get('logid')], '*', MUST_EXIST);
-
-            $rows[] = [
-                'id' => $change->get('id'),
-                'plugin' => $logentry->plugin ?? get_string('core', 'local_configkeeper'),
-                'name' => $logentry->name,
-                'value' => $logentry->value,
-                'note' => $change->get('note'),
-            ];
-        }
-
-        $data = [
-            'rows' => $rows,
-        ];
-
-        return $OUTPUT->render_from_template('local_configkeeper/confignote_row', $data);
     }
 }

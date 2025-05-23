@@ -15,17 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for local_configkeeper plugin.
+ * Helper functions for local_configkeeper plugin.
  *
  * @package   local_configkeeper
  * @copyright 2025 Jon Deavers <jondeavers@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_configkeeper;
 
-$plugin->version   = 2025030801;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2022112800;        // Requires Moodle 4.3 (2022112800).
-$plugin->component = 'local_configkeeper'; // Full name of the plugin.
-$plugin->maturity  = MATURITY_ALPHA;    // Maturity level.
-$plugin->release   = '0.1.0';           // Human-readable version name.
+use local_configkeeper\local\data\config_note;
+
+class util {
+    public static function get_confignotes(array $ids): array {
+        $notes = [];
+
+        // TODO: YOU LEFT OFF HERE. YOU NEED TO GET THE CONFIGLOG DATA FOR EACH NOTE.
+        // This should probably be done inside of a util method. Think about how to do it
+        // in a way that doesn't require query the db for every note.
+        foreach ($ids as $id) {
+            $note = new config_note($id);
+            $configlog =
+        }
+
+        return $notes;
+    }
+}
