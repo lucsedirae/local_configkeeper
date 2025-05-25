@@ -111,6 +111,19 @@ class config_note extends base {
     }
 
     /**
+     * Get a config note by its log ID.
+     *
+     * @param int $id The log ID to search for.
+     * @return config_note
+     * @throws \coding_exception
+     * @throws invalid_persistent_exception
+     */
+    public static function get_note_by_logid(int $id): static {
+        global $DB;
+        return new static(0, $DB->get_record('local_configkeeper', ['logid' => $id]));
+    }
+
+    /**
      * Get the status of the config change.
      *
      * @param string $status

@@ -26,6 +26,7 @@ $string['pluginname'] = 'Config keeper';
 
 $string['core'] = 'Core';
 $string['config'] = 'Config';
+$string['confignote'] = 'Config note';
 $string['leave_note'] = 'Leave a note';
 $string['note'] = 'Note';
 $string['plugin'] = 'Plugin';
