@@ -26,18 +26,42 @@ namespace local_configkeeper;
 
 use local_configkeeper\local\data\config_note;
 
+/**
+ * Utilities class for local_configkeeper.
+ */
 class util {
+    /**
+     * Retrieves config notes for the given IDs.
+     *
+     * @param array $ids
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
     public static function get_confignotes(array $ids): array {
-        $notes = [];
+        global $DB;
+        $rows = [];
 
-        // TODO: YOU LEFT OFF HERE. YOU NEED TO GET THE CONFIGLOG DATA FOR EACH NOTE.
-        // This should probably be done inside of a util method. Think about how to do it
-        // in a way that doesn't require query the db for every note.
+        // Get config change logs.
+        $params = [
+            'ids' => implode(',', $ids),
+        ];
+        $sql = "SELECT * FROM m_config_log WHERE id IN (" . implode(',', $ids) . ")";
+        $configlogs = $DB->get_records_sql($sql, $params);
+
         foreach ($ids as $id) {
-            $note = new config_note($id);
-            $configlog =
+            $note = config_note::get_note_by_logid($id);
+            $log = $configlogs[$id];
+
+            $rows[] = [
+                'id' => $note->get('id'),
+                'plugin' => $log->plugin,
+                'setting' => $log->setting,
+                'value' => $log->value,
+                'note' => $note->get('note'),
+            ];
         }
 
-        return $notes;
+        return $rows;
     }
 }

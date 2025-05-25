@@ -16,6 +16,7 @@
 
 namespace local_configkeeper\local;
 
+use context_system;
 use core\invalid_persistent_exception;
 use local_configkeeper\local\data\config_note;
 
@@ -54,7 +55,7 @@ class config_note_handler {
 
         // Mark the config changes as viewed.
         foreach ($changes as $change) {
-            $ids[] = $change->get('id');
+            $ids[] = $change->get('logid');
             $change->set_note_status(config_note::CONFIGKEEPER_REVIEWED);
         }
 

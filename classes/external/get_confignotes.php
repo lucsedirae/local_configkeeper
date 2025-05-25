@@ -31,16 +31,19 @@ use core_external\external_single_structure;
 use core_external\external_value;
 use local_configkeeper\util;
 
+/**
+ * Class to handle passing of config notes data to modal.
+ *
+ * @package local_configkeeper\external
+ */
 class get_confignotes extends external_api {
-    public static function execute_parameters(): external_function_parameters {
-        return new external_function_parameters([
-            'ids' => new external_multiple_structure(
-                new external_value(PARAM_INT, 'Confignote id'),
-                'Array of confignote ids'
-            ),
-        ]);
-    }
-
+    /**
+     * Execute the external function to retrieve config notes.
+     *
+     * @param array $ids
+     * @return array
+     * @throws \invalid_parameter_exception
+     */
     public static function execute(array $ids): array {
         // Validate the external params.
         [
@@ -52,6 +55,25 @@ class get_confignotes extends external_api {
         return ['confignotes' => util::get_confignotes($ids)];
     }
 
+    /**
+     * Define the parameters for the external function.
+     *
+     * @return external_function_parameters
+     */
+    public static function execute_parameters(): external_function_parameters {
+        return new external_function_parameters([
+            'ids' => new external_multiple_structure(
+                new external_value(PARAM_INT, 'Confignote id'),
+                'Array of confignote ids'
+            ),
+        ]);
+    }
+
+    /**
+     * Define the return structure for the external function.
+     *
+     * @return external_single_structure
+     */
     public static function execute_returns(): external_single_structure {
         return new external_single_structure([
             'confignotes' => new external_multiple_structure(
