@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * External service class to get config note data for modal.
+ * External service class to save config note changes from modal.
  *
  * @package   local_configkeeper
  * @copyright 2025 Jon Deavers <jondeavers@gmail.com>
@@ -36,7 +36,9 @@ use local_configkeeper\util;
  *
  * @package local_configkeeper\external
  */
-class get_confignotes extends external_api {
+class save_confignotes extends external_api {
+    // TODO YOU LEFT OFF HERE: Update this class to handle saving config notes.
+
     /**
      * Execute the external function to retrieve config notes.
      *
@@ -52,9 +54,7 @@ class get_confignotes extends external_api {
             'ids' => $ids,
         ]);
 
-        return [
-            'confignotes' => util::get_confignotes($ids)
-        ];
+        return ['confignotes' => util::get_confignotes($ids)];
     }
 
     /**

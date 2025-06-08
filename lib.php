@@ -31,8 +31,9 @@ use local_configkeeper\local\config_note_handler;
  * @throws \core\invalid_persistent_exception
  * @throws coding_exception
  * @throws dml_exception
+ * @throws moodle_exception
  */
 function local_configkeeper_before_footer(): void {
     $handler = new config_note_handler();
-    $handler->process_hook();
+    //$handler->process_hook();
 }

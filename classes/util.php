@@ -53,6 +53,8 @@ class util {
             $note = config_note::get_note_by_logid($id);
             $log = $configlogs[$id];
 
+
+
             $rows[] = [
                 'id' => $note->get('id'),
                 'plugin' => $log->plugin,

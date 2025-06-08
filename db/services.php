@@ -28,6 +28,12 @@ $functions = [
     'local_configkeeper_get_confignotes' => [
         'classname' => 'local_configkeeper\external\get_confignotes',
         'description' => 'Retrieves config note data for modal table.',
+        'type' => 'read',
+        'ajax' => true,
+    ],
+    'local_configkeeper_save_confignotes' => [
+        'classname' => 'local_configkeeper\external\save_confignotes',
+        'description' => 'Saves notes on config changes.',
         'type' => 'write',
         'ajax' => true,
     ],
